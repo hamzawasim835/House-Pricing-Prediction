@@ -1,0 +1,11 @@
+Initial Observations based on EDA:
+
+None of the numerical features have a bell curve, but some are more skewed than others.
+
+Price and size initially go well together, but as size increases the connection breaks down until it stops being a useful predictor entirely.
+
+Similarly for room number, it starts out being strongly related to price, until it stops being so. 
+
+Inland cities are generally cheaper.
+
+Istanbul has both a higher median price and a wider range of prices that are still non-outliers.
