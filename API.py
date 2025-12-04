@@ -17,9 +17,11 @@ app.add_middleware(
 
 # 2. Load Model
 model = joblib.load("turkiye_house_price_model.pkl")
+print("Model loaded successfully.") if model else print("Failed to load model.")  
 
 # 3. Load Scaler
 scaler = joblib.load("standard_scaler.pkl")
+print("Scaler loaded successfully.") if scaler else print("Failed to load scaler.")
  
 # 4. Input Data Schema
 class HouseFeatures(BaseModel):
