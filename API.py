@@ -1,125 +1,121 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-import joblib
+import pandas as pd
 import numpy as np
-from fastapi.middleware.cors import CORSMiddleware
+import joblib
+import re
 
-app = FastAPI(title="House Price Prediction System")
-
-# CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# Load Model & Scaler
+# 1. Kaydedilen Modelleri Yükle
 model = joblib.load("turkiye_house_price_model.pkl")
 scaler = joblib.load("standard_scaler.pkl")
+target_encoder = joblib.load("target_encoder.pkl")
+label_encoders = joblib.load("label_encoders.pkl")
+model_columns = joblib.load("model_columns.pkl")
 
-# === MODEL FEATURES ===
-MODEL_FEATURES = [
-    'Net_Metrekare', 'Brüt_Metrekare', 'Oda_Sayısı', 'Bulunduğu_Kat', 'Eşya_Durumu',
-    'Binanın_Yaşı', 'Şehir', 'Binanın_Kat_Sayısı', 'Yatırıma_Uygunluk', 'Takas',
-    'Banyo_Sayısı', 'Oda_Buyuklugu', 'Banyo_Orani',
+app = FastAPI()
 
-    # Isıtma Tipi
-    'Isıtma_Tipi_Doğalgaz Sobalı', 'Isıtma_Tipi_Güneş Enerjisi', 'Isıtma_Tipi_Isıtma Yok',
-    'Isıtma_Tipi_Jeotermal', 'Isıtma_Tipi_Kat Kaloriferi', 'Isıtma_Tipi_Klimalı',
-    'Isıtma_Tipi_Kombi Doğalgaz', 'Isıtma_Tipi_Merkezi (Pay Ölçer)',
-    'Isıtma_Tipi_Merkezi Doğalgaz', 'Isıtma_Tipi_Merkezi Kömür',
-    'Isıtma_Tipi_Sobalı', 'Isıtma_Tipi_Yerden Isıtma', 'Isıtma_Tipi_Bilinmiyor',
-
-    # Kullanım Durumu
-    'Kullanım_Durumu_Kiracı Oturuyor',
-    'Kullanım_Durumu_Mülk Sahibi Oturuyor',
-    'Kullanım_Durumu_Bilinmiyor',
-
-    # Tapu Durumu
-    'Tapu_Durumu_Bilinmiyor',
-    'Tapu_Durumu_Hisseli Tapu',
-    'Tapu_Durumu_Kat Mülkiyeti',
-    'Tapu_Durumu_Kat İrtifakı',
-    'Tapu_Durumu_Müstakil Tapulu',
-    'Tapu_Durumu_nan'
-]
-
-# === USER INPUT MODEL ===
-class HouseInput(BaseModel):
+# 2. Veri Modeli (Giriş Değerleri)
+class HouseData(BaseModel):
     Net_Metrekare: float
-    Brüt_Metrekare: float
-    Oda_Sayısı: int
-    Bulunduğu_Kat: int
-    Eşya_Durumu: int
-    Binanın_Yaşı: int
-    Şehir: float
-    Binanın_Kat_Sayısı: int
-    Yatırıma_Uygunluk: int
-    Takas: int
-    Banyo_Sayısı: int
-    Oda_Buyuklugu: float
-    Banyo_Orani: float
-
-    # kategorik ham girişler
-    Isıtma_Tipi: str
-    Kullanım_Durumu: str
+    Brut_Metrekare: float
+    Oda_Sayisi: float
+    Bulundugu_Kat: str  # Regex yapılacak
+    Esya_Durumu: str
+    Binanin_Yasi: str   # Regex yapılacak
+    Isitma_Tipi: str
+    Sehir: str
+    Binanin_Kat_Sayisi: int
+    Kullanim_Durumu: str
+    Yatirima_Uygunluk: str
+    Takas: str
     Tapu_Durumu: str
+    Banyo_Sayisi: float
 
+# 3. Temizlik Fonksiyonları (Notebook'tan alındı)
+def clean_age(veri):
+    sayilar = [float(s) for s in re.findall(r'\d+', str(veri))]
+    if len(sayilar) == 2:
+        return sum(sayilar) / 2
+    elif len(sayilar) == 1:
+        return sayilar[0]
+    return 0.0
 
-def encode_categoricals(data: HouseInput):
-    """
-    Kullanıcıdan gelen kategorik değerleri modelin kolonlarına çeviren fonksiyon
-    """
-    row = {col: 0 for col in MODEL_FEATURES}
+def clean_floor(data):
+    yazi = str(data).lower()
+    if "giriş" in yazi or "zemin" in yazi or "bahçe" in yazi:
+        return 0.0
+    sayilar = re.findall(r'\d+', yazi)
+    if sayilar:
+        return float(sayilar[0])
+    return 0.0
 
-    # numeric values
-    row.update({
-        "Net_Metrekare": data.Net_Metrekare,
-        "Brüt_Metrekare": data.Brüt_Metrekare,
-        "Oda_Sayısı": data.Oda_Sayısı,
-        "Bulunduğu_Kat": data.Bulunduğu_Kat,
-        "Eşya_Durumu": data.Eşya_Durumu,
-        "Binanın_Yaşı": data.Binanın_Yaşı,
-        "Şehir": data.Şehir,
-        "Binanın_Kat_Sayısı": data.Binanın_Kat_Sayısı,
-        "Yatırıma_Uygunluk": data.Yatırıma_Uygunluk,
-        "Takas": data.Takas,
-        "Banyo_Sayısı": data.Banyo_Sayısı,
-        "Oda_Buyuklugu": data.Oda_Buyuklugu,
-        "Banyo_Orani": data.Banyo_Orani,
-    })
-
-    # Isıtma
-    heat_col = f"Isıtma_Tipi_{data.Isıtma_Tipi}"
-    if heat_col in row:
-        row[heat_col] = 1
-
-    # Kullanım
-    use_col = f"Kullanım_Durumu_{data.Kullanım_Durumu}"
-    if use_col in row:
-        row[use_col] = 1
-
-    # Tapu
-    deed_col = f"Tapu_Durumu_{data.Tapu_Durumu}"
-    if deed_col in row:
-        row[deed_col] = 1
-
-    return [row[col] for col in MODEL_FEATURES]
-
-
+# 4. Tahmin Endpoint'i
 @app.post("/predict")
-def predict_price(data: HouseInput):
-    row = encode_categoricals(data)
-    row = np.array([row])
+def predict_price(data: HouseData):
+    try:
+        # Veriyi DataFrame'e çevir
+        df = pd.DataFrame([data.dict()])
+        
+        # Sütun isimlerini Notebook ile eşle (Türkçe karakter vb.)
+        df.rename(columns={
+            'Brut_Metrekare': 'Brüt_Metrekare',
+            'Oda_Sayisi': 'Oda_Sayısı',
+            'Bulundugu_Kat': 'Bulunduğu_Kat',
+            'Eşya_Durumu': 'Eşya_Durumu',
+            'Binanin_Yasi': 'Binanın_Yaşı',
+            'Isitma_Tipi': 'Isıtma_Tipi',
+            'Sehir': 'Şehir',
+            'Binanin_Kat_Sayisi': 'Binanın_Kat_Sayısı',
+            'Kullanim_Durumu': 'Kullanım_Durumu',
+            'Yatirima_Uygunluk': 'Yatırıma_Uygunluk',
+            'Tapu_Durumu': 'Tapu_Durumu',
+            'Banyo_Sayisi': 'Banyo_Sayısı'
+        }, inplace=True)
 
-    # scale
-    row_scaled = scaler.transform(row)
+        # --- FEATURE ENGINEERING ---
+        df['Oda_Buyuklugu'] = df['Net_Metrekare'] / df['Oda_Sayısı']
+        df['Banyo_Orani'] = df['Banyo_Sayısı'] / df['Oda_Sayısı']
+        
+        # --- TEMİZLİK (REGEX) ---
+        df['Binanın_Yaşı'] = df['Binanın_Yaşı'].apply(clean_age)
+        df['Bulunduğu_Kat'] = df['Bulunduğu_Kat'].apply(clean_floor)
+        
+        # Banyo sayısı outlier capping
+        df.loc[df['Banyo_Sayısı'] > 5, 'Banyo_Sayısı'] = 5
 
-    # predict
-    log_price = model.predict(row_scaled)[0]
-    price = float(np.expm1(log_price))
+        # --- ENCODING ---
+        # 1. Label Encoding
+        for col in ['Takas', 'Eşya_Durumu', 'Yatırıma_Uygunluk']:
+            # Bilinmeyen değer gelirse '0' veya varsayılan ata
+            try:
+                df[col] = label_encoders[col].transform(df[col].astype(str))
+            except:
+                df[col] = 0 # Fallback
 
-    return {"estimated_price": round(price, 2), "currency": "TL"}
+        # 2. Target Encoding (Şehir, vb.)
+        # Target encoder transform sadece X ister (y yok)
+        df = target_encoder.transform(df)
 
-# To run: python -m uvicorn API:app --reload
+        # 3. One-Hot Encoding
+        cols_to_ohe = ['Isıtma_Tipi', 'Kullanım_Durumu', 'Tapu_Durumu']
+        df = pd.get_dummies(df, columns=cols_to_ohe, drop_first=True)
+
+        # --- KOLON HİZALAMA (Çok Önemli) ---
+        # API'ye gelen tek satırda tüm one-hot kolonları oluşmaz.
+        # Modelin beklediği kolonlara göre reindex yapıp eksikleri 0 ile dolduruyoruz.
+        df = df.reindex(columns=model_columns, fill_value=0)
+
+        # --- SCALING ---
+        num_cols = ['Net_Metrekare','Brüt_Metrekare','Oda_Sayısı','Binanın_Kat_Sayısı','Banyo_Sayısı','Oda_Buyuklugu','Banyo_Orani']
+        df[num_cols] = scaler.transform(df[num_cols])
+
+        # --- TAHMİN ---
+        log_pred = model.predict(df)
+        price = np.expm1(log_pred)[0] # Logaritmik tahmini TL'ye çevir
+
+        return {"tahmini_fiyat": f"{price:,.0f} TL"}
+
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+# python -m uvicorn API:app --reload
