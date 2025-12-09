@@ -22,7 +22,7 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,              # Allow the frontend to access the API
+    allow_origins=["*"],              # Allow the frontend to access the API
     allow_credentials=True,             # Allow cookies/authorization headers
     allow_methods=["*"],                # Allow all methods (POST, GET, etc.)
     allow_headers=["*"],                # Allow all headers
@@ -185,4 +185,5 @@ def predict_price(data: HouseData):
 import joblib
 cols = joblib.load("model_columns.pkl")
 print(cols)
+
 #python -m uvicorn API:app --reload
