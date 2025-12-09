@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ev Fiyatı Tahmini</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 600px; }
+        h2 { text-align: center; color: #333; margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        label { display: block; margin-bottom: 5px; color: #666; font-size: 0.9em; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background-color: #28a745; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; margin-top: 20px; transition: 0.3s; }
+        button:hover { background-color: #218838; }
+        #result { margin-top: 20px; text-align: center; font-size: 1.5em; font-weight: bold; color: #333; }
+        .loading { color: #999; font-size: 1rem; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🏡 Ev Fiyatı Tahmin Sistemi</h2>
+    <form id="houseForm">
+        <div class="grid">
+            <div><label>Net m²</label><input type="number" id="Net_Metrekare" value="85" required></div>
+            <div><label>Brüt m²</label><input type="number" id="Brut_Metrekare" value="100" required></div>
+            <div><label>Oda Sayısı</label><input type="number" id="Oda_Sayisi" value="3" step="0.5" required></div>
+            <div><label>Banyo Sayısı</label><input type="number" id="Banyo_Sayisi" value="1" required></div>
+            <div><label>Bulunduğu Kat</label><input type="text" id="Bulundugu_Kat" value="2" required></div>
+            <div><label>Bina Yaşı</label><input type="text" id="Binanin_Yasi" value="5" required></div>
+            <div><label>Şehir</label><input type="text" id="Sehir" value="İstanbul" required></div>
+            <div><label>Binadaki Kat</label><input type="number" id="Binanin_Kat_Sayisi" value="5" required></div>
+            
+            <div><label>Isıtma Tipi</label>
+                <select id="Isitma_Tipi">
+                    <option value="Kombi (Doğalgaz)">Kombi (Doğalgaz)</option>
+                    <option value="Merkezi">Merkezi</option>
+                    <option value="Soba">Soba</option>
+                </select>
+            </div>
+            <div><label>Eşya Durumu</label>
+                <select id="Esya_Durumu"><option value="Eşyalı">Eşyalı</option><option value="Boş">Boş</option></select>
+            </div>
+            <div><label>Kullanım</label>
+                <select id="Kullanim_Durumu"><option value="Boş">Boş</option><option value="Kiracılı">Kiracılı</option></select>
+            </div>
+            <div><label>Yatırım</label>
+                <select id="Yatirima_Uygunluk"><option value="Yatırıma Uygun">Uygun</option><option value="Bilinmiyor">Bilinmiyor</option></select>
+            </div>
+            <div><label>Takas</label>
+                <select id="Takas"><option value="Hayır">Hayır</option><option value="Evet">Evet</option></select>
+            </div>
+            <div><label>Tapu</label>
+                <select id="Tapu_Durumu"><option value="Kat Mülkiyeti">Kat Mülkiyeti</option><option value="Arsa">Arsa</option></select>
+            </div>
+        </div>
+        <button type="submit">Fiyatı Tahmin Et</button>
+    </form>
+    <div id="result"></div>
+</div>
+
+<script>
+    document.getElementById('houseForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const resDiv = document.getElementById('result');
+        resDiv.innerHTML = '<span class="loading">Hesaplanıyor...</span>';
+
+        // Form verilerini topla
+        const data = {};
+        Array.from(e.target.elements).forEach(el => {
+            if (el.id) data[el.id] = (el.type === 'number') ? parseFloat(el.value) : el.value;
+        });
+
+        try {
+            // API'ye istek at
+            const response = await fetch('http://127.0.0.1:8000/predict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            
+            if(response.ok) {
+                resDiv.innerText = "💰 " + result.tahmini_fiyat;
+                resDiv.style.color = "#28a745";
+            } else {
+                resDiv.innerText = "Hata: " + result.detail;
+                resDiv.style.color = "red";
+            }
+        } catch (err) {
+            resDiv.innerText = "Bağlantı Hatası! API çalışıyor mu?";
+            resDiv.style.color = "red";
+        }
+    };
+</script>
+
+</body>
+</html>
