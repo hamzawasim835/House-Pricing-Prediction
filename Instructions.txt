@@ -1,0 +1,13 @@
+Instructions for running the frontend and API:
+
+For the API:
+    Navigate to the directory
+    In the terminal, run python -m uvicorn API:app --reload
+
+After that, to open a server for the frontend:
+    Open a new terminal
+    Navigate to directory
+    Run python -m http.server 8080
+
+Finally, paste this link in browser:
+    http://127.0.0.1:8080/frontend.html
