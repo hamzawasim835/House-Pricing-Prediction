@@ -4,3 +4,7 @@ pydantic
 pandas
 numpy
 joblib
+xgboost
+scikit-learn
+matplotlib
+seaborn
