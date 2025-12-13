@@ -62,6 +62,7 @@ Frontend URL: https://house-pricing-prediction-xggx.onrender.com
 
 
 
-###### Notes
+# Notes
 Variuos Commercial LLMs were used to assist with various aspects of this project.
+
 
