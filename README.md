@@ -18,17 +18,28 @@ Welcome to our House pricing prediction project. Using a tuned XgBoost model, th
 njibhduvgewuqchwajv hqe  
 
 # 📁 Folder Structure  
-📦 House-Pricing-Prediction
-├── 📁 assets/               # Images generated through EDA and model tuning
-├── 📁 data/                 # Dataset(s) and data resources
-├── 📁 docs/                 # Documents created throughout project, including insights from EDA
-├── 📁 models/               # Trained/serialized ML models (e.g., XGBoost pickle files)
-├── 📁 notebooks/            # Jupyter Notebooks (EDA, modeling experimentation)
-├── 📄 API.py                # Backend API entry point for prediction service
-├── 📄 index.html            # Frontend user interface
-├── 📄 requirements.txt      # Python dependencies
-├── 📄 README.md             # Project overview & instructions
-└── └── __pycache__/         # Python cache folder (auto-generated)
+📦 House-Pricing-Prediction  
+
+├── 📁 assets/               # Images generated through EDA and model tuning  
+
+├── 📁 data/                 # Dataset(s) and data resources  
+
+├── 📁 docs/                 # Documents created throughout project, including insights from EDA  
+
+├── 📁 models/               # Trained/serialized ML models (e.g., XGBoost pickle files)  
+
+├── 📁 notebooks/            # Jupyter Notebooks (EDA, modeling experimentation)  
+
+├── 📄 API.py                # Backend API entry point for prediction service  
+
+├── 📄 index.html            # Frontend user interface  
+
+├── 📄 requirements.txt      # Python dependencies  
+
+├── 📄 README.md             # Project overview & instructions  
+
+└── └── __pycache__/         # Python cache folder (auto-generated)  
+
 
 # 🚀 How to test it yourself  
 Go to the frontend at this link: https://house-pricing-prediction-xggx.onrender.com. Due to the project's utilisation of Render's free plan, the API spins down after a period of inactivity. As a result, the first usage of the project after a period of inactivity might result in some delays in getting results by the user. This delay is not indicative of a problem with our project, but rather a direct result of using Render's free plan to save on deployment and hosting costs. 
@@ -39,6 +50,7 @@ Alternatively, you can also directly test the API through Swagger's UI using thi
 # 🔗 API and Frontend links
 API URL: https://house-pricing-prediction-dlyo.onrender.com  
 Frontend URL: https://house-pricing-prediction-xggx.onrender.com
+
 
 
 
