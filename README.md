@@ -14,8 +14,17 @@ Welcome to our House pricing prediction project. Using a tuned XgBoost model, th
 
 **Deployment Platform:** Render, for both the API (Deployed as a web service), and the Frontend (Deployed as a static website).  
 
-# 💻 Technologies Used   
-njibhduvgewuqchwajv hqe  
+# 💻 Tools Used   
+| Category | Technology | Purpose |
+|--------|-----------|---------|
+| Programming Language | Python | Core language used for data processing, modeling, and API development |
+| Data Analysis | Pandas | Data cleaning, transformation, and feature engineering |
+| Numerical Computing | NumPy | Efficient numerical operations and array handling |
+| Machine Learning | XGBoost | Regression model for house price prediction |
+| Model Persistence | Joblib | Saving and loading trained machine learning models |
+| API Framework | FastAPI | Serving the trained model as a RESTful API |
+| Frontend | HTML / CSS / JavaScript | User interface for interacting with the prediction system |
+| Deployment | (Optional: Render / Local) | Hosting the API and frontend | 
 
 # 📁 Folder Structure  
 ```
@@ -50,6 +59,7 @@ Alternatively, you can also directly test the API through Swagger's UI using thi
 # 🔗 API and Frontend links
 API URL: https://house-pricing-prediction-dlyo.onrender.com  
 Frontend URL: https://house-pricing-prediction-xggx.onrender.com
+
 
 
 
