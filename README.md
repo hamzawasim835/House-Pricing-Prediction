@@ -1,7 +1,7 @@
 # 🏠Housing Price Predicition Project
 
 
-.. By Şule Ahmet and Hamza Darwish  
+.. By [Şule Ahmet](https://github.com/suleahmet) and [Hamza Darwish](https://github.com/hamzawasim835)  
 Welcome to our House pricing prediction project. Using a tuned XgBoost model, this project takes in a number of inputs (house size, room number, etc) from the user through an HTML and JS based frontend and routes the data through an API to the model and gives the user an output, denoted in TRY, through the API and frontend.  
 
 
@@ -15,7 +15,7 @@ Welcome to our House pricing prediction project. Using a tuned XgBoost model, th
 **Deployment Platform:** Render, for both the API (Deployed as a web service), and the Frontend (Deployed as a static website).  
 
 # 💻 Tools Used   
-| Category | Technology | Purpose |
+| Category | Tool | Purpose |
 |--------|-----------|---------|
 | Programming Language | Python | Core language used for data processing, modeling, and API development, in addition to Jupyter notebooks |
 | Data Analysis | Pandas | Data cleaning, transformation, and feature engineering |
@@ -59,6 +59,7 @@ Alternatively, you can also directly test the API through Swagger's UI using thi
 # 🔗 API and Frontend links
 API URL: https://house-pricing-prediction-dlyo.onrender.com  
 Frontend URL: https://house-pricing-prediction-xggx.onrender.com
+
 
 
 
