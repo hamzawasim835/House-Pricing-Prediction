@@ -61,4 +61,7 @@ API URL: https://house-pricing-prediction-dlyo.onrender.com
 Frontend URL: https://house-pricing-prediction-xggx.onrender.com
 
 
+
+###### Notes
 Variuos Commercial LLMs were used to assist with various aspects of this project.
+
