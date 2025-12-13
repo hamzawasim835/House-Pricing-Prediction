@@ -6,10 +6,14 @@ Welcome to our House pricing prediction project. Using a tuned XgBoost model, th
 
 
 # About the project  
-**Model:** Tuned XgBoost regression model.
-**Objective:** Predict the price of a real estate in Türkiye depending on 15 different factors. 
-**Evaluation Criteria:** Mean Average Error (MAE), Real Mean Squared Error (RMSE), and R^2.
-**Deployment Platform:** Render, for both the API (Deployed as a web service), and the Frontend (Deployed as a static website).
+**Model:** Tuned XgBoost regression model.  
+
+**Objective:** Predict the price of a real estate in Türkiye depending on 15 different factors.   
+
+**Evaluation Criteria:** Mean Average Error (MAE), Real Mean Squared Error (RMSE), and R^2.  
+
+**Deployment Platform:** Render, for both the API (Deployed as a web service), and the Frontend (Deployed as a static website).  
+
 
 
 
@@ -17,6 +21,7 @@ Welcome to our House pricing prediction project. Using a tuned XgBoost model, th
 # API and Frontend links
 API URL: https://house-pricing-prediction-dlyo.onrender.com  
 Frontend URL: https://house-pricing-prediction-xggx.onrender.com
+
 
 
 
