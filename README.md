@@ -15,13 +15,21 @@ Welcome to our House pricing prediction project. Using a tuned XgBoost model, th
 **Deployment Platform:** Render, for both the API (Deployed as a web service), and the Frontend (Deployed as a static website).  
 
 # 💻 Technologies Used   
-njibhduvgewuqchwajv hqe
+njibhduvgewuqchwajv hqe  
 
+# 📁 Folder Structure  
+bhuvgyfctucygvubhknjlnhbiugvycftyvgubh  
 
+# 🚀 How to test it yourself  
+ncwbuvebahdschbveucadjbievu  
+
+jhvgycfghvgycfvguhvgut  
+uiytbyvutbyuvtcvvytcyb
 
 # 🔗 API and Frontend links
 API URL: https://house-pricing-prediction-dlyo.onrender.com  
 Frontend URL: https://house-pricing-prediction-xggx.onrender.com
+
 
 
 
