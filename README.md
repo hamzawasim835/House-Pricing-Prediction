@@ -21,14 +21,15 @@ njibhduvgewuqchwajv hqe
 bhuvgyfctucygvubhknjlnhbiugvycftyvgubh  
 
 # 🚀 How to test it yourself  
-ncwbuvebahdschbveucadjbievu  
+Go to the frontend at this link: https://house-pricing-prediction-xggx.onrender.com. Due to the project's utilisation of Render's free plan, the API spins down after a period of inactivity. As a result, the first usage of the project after a period of inactivity might result in some delays in getting results by the user. This delay is not indicative of a problem with our project, but rather a direct result of using Render's free plan to save on costs. 
 
-jhvgycfghvgycfvguhvgut  
-uiytbyvutbyuvtcvvytcyb
+Alternatively, you can also directly test the API through Swagger's UI using this link: https://house-pricing-prediction-dlyo.onrender.com/docs.  
+
 
 # 🔗 API and Frontend links
 API URL: https://house-pricing-prediction-dlyo.onrender.com  
 Frontend URL: https://house-pricing-prediction-xggx.onrender.com
+
 
 
 
